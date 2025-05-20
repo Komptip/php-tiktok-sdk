@@ -2,6 +2,7 @@
     "name": "komptip/php-tiktok-sdk",
     "description": "PHP sdk for TikTok",
     "type": "library",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Komptip\\PhpTiktokSdk\\": "src/"
