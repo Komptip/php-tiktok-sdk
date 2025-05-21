@@ -14,3 +14,6 @@ In your existing Laravel application you can install this package using [Compose
 ```bash
 composer require komptip/php-tiktok-sdk
 ```
+
+## Usage
+Check [wiki](https://github.com/Komptip/php-tiktok-sdk/wiki) for detailed documentation.
