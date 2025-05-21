@@ -16,4 +16,27 @@ composer require komptip/php-tiktok-sdk
 ```
 
 ## Usage
+
+```php
+use Komptip\PhpTiktokSdk\PhpTiktokSdk;
+use Komptip\PhpTiktokSdk\AuthorizationScope;
+use Komptip\PhpTiktokSdk\UserField;
+
+$tiktok = new PhpTiktokSdk('client_key', 'client_secret');
+
+// Get auth url
+$authUrl = $tiktok->createAuthUrl(
+    scopes: [AuthorizationScope::UserInfoBasic, AuthorizationScope::UserInfoProfile],
+    csrfState: $tiktok->createCsrfState(),
+    redirectUri: 'https://example.com/callback'
+);
+
+// Get access token
+$accessToken = $tiktok->getAccessToken($authorizationCode);
+
+// Get user info
+$userInfo = $tiktok->getUserInfo($accessToken['access_token'], [UserField::OpenID, UserField::Displayname]);
+```
+
+
 Check [wiki](https://github.com/Komptip/php-tiktok-sdk/wiki) for detailed documentation.
