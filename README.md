@@ -1,5 +1,4 @@
 # PHP TikTok SDK
-## PHP SDK for TikTok REST API
 
 This package provides an wrapper for TikTok REST API for PHP 8.3 and later
 
@@ -16,6 +15,10 @@ composer require "komptip/php-tiktok-sdk:v1.0.0-alpha"
 ```
 
 ## Usage
+
+Check [documentation](https://github.com/Komptip/php-tiktok-sdk/wiki/Configuration-and-basic-usage) for basic understanding of configuration and usage, and [user authentication](https://github.com/Komptip/php-tiktok-sdk/wiki/User-authorization) for user authentication
+
+Here is a basic example of how to use this package:
 
 ```php
 use Komptip\PhpTiktokSdk\PhpTiktokSdk;
@@ -38,5 +41,23 @@ $accessToken = $tiktok->getAccessToken($authorizationCode);
 $userInfo = $tiktok->getUserInfo($accessToken['access_token'], [UserField::OpenID, UserField::Displayname]);
 ```
 
+## State of the project
 
-Check [wiki](https://github.com/Komptip/php-tiktok-sdk/wiki) for detailed documentation.
+This package is in early development stage. Not all endpoints are implemented yet.
+
+- [x] [Login kit](https://developers.tiktok.com/doc/login-kit-overview?enter_method=left_navigation)
+    User authorization 
+    **Ready to use**
+- [ ] [Content posting API](https://developers.tiktok.com/doc/content-posting-api-get-started?enter_method=left_navigation)
+    Posting videos and images to user profile
+    **Not implemented yet**
+- [ ] [Data Portability API](https://developers.tiktok.com/doc/data-portability-api-get-started?enter_method=left_navigation)
+    Getting user data such as activity, comments, etc.
+    **Not implemented yet**
+- [ ] [Display API](https://developers.tiktok.com/doc/display-api-overview?enter_method=left_navigation)
+    User profile information
+    **Partially implemented. See [/v2/user/info/](https://github.com/Komptip/php-tiktok-sdk/wiki/User-authorization)**. /v2/video/list/ and /v2/video/query/ are not implemented yet
+
+## License
+
+This package is licensed under the MIT License.
