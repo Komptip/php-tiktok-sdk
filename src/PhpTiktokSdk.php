@@ -50,7 +50,7 @@ class PhpTiktokSdk
         $this->redirectUri = $redirectUri;
     }
 
-    private function getRedirectUri(?string $redirectUri = null): string
+    public function getRedirectUri(?string $redirectUri = null): string
     {
         $url = $redirectUri ?? $this->redirectUri;
 
@@ -75,7 +75,7 @@ class PhpTiktokSdk
         return $response;
     }
 
-    public function getAccessToken(string $authorizationCode): array
+    public function getAccessToken(string $authorizationCode, ?string $redirectUri = null): array
     {
         $response = $this->getHttpClient()->post(
             'https://open.tiktokapis.com/v2/oauth/token/',
@@ -88,7 +88,7 @@ class PhpTiktokSdk
                     'client_secret' => $this->clientSecret,
                     'code' => $authorizationCode,
                     'grant_type' => 'authorization_code',
-                    'redirect_uri' => $this->getRedirectUri(),
+                    'redirect_uri' => $this->getRedirectUri($redirectUri),
                 ]
             ]
         );
