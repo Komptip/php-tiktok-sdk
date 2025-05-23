@@ -11,8 +11,8 @@ class AuthURLTest extends TestCase
 {
     public function testCreateAuthUrl()
     {
-        $tiktok = new PhpTiktokSdk('client_key', 'client_secret');
-        $authUrl = $tiktok->createAuthUrl(
+        $service = new PhpTiktokSdk('client_key', 'client_secret');
+        $authUrl = $service->createAuthUrl(
             scopes: [AuthorizationScope::UserInfoBasic, AuthorizationScope::UserInfoProfile],
             csrfState: 'csrf_state',
             redirectUri: 'https://example.com/callback'

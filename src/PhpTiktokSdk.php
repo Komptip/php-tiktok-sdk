@@ -20,13 +20,46 @@ class PhpTiktokSdk
         $this->redirectUri = $redirectUri;
     }
 
-    private function getHttpClient(): Client
+    public function setHttpClient(Client $httpClient): void
+    {
+        $this->httpClient = $httpClient;
+    }
+
+    public function getHttpClient(): Client
     {
         if (!isset($this->httpClient)) {
-            $this->httpClient = new Client();
+            $this->createHttpClient();
         }
 
         return $this->httpClient;
+    }
+
+    public function createHttpClient()
+    {
+        $this->setHttpClient(new Client());
+    }
+
+    public function handleHttpResponse(array $response): array
+    {
+        if (isset($response['error'])) {
+            throw new TikTokAPIException("{$response['error']}: {$response['error_description']} | log_id: {$response['log_id']}");
+        }
+
+        return $response;
+    }
+
+    public function makeGetRequest(string $url, $options = []): array
+    {
+        $response = $this->getHttpClient()->get($url, $options);
+
+        return $this->handleHttpResponse(json_decode($response->getBody(), true));
+    }
+    
+    public function makePostRequest(string $url, $options = []): array
+    {
+        $response = $this->getHttpClient()->post($url, $options);
+
+        return $this->handleHttpResponse(json_decode($response->getBody(), true));
     }
 
     public function createAuthUrl(array $scopes, string $csrfState, ?string $redirectUri = null): string
@@ -66,18 +99,9 @@ class PhpTiktokSdk
         return bin2hex(random_bytes(16));
     }
 
-    public function handleHttpResponse(array $response): array
-    {
-        if (isset($response['error'])) {
-            throw new TikTokAPIException("{$response['error']}: {$response['error_description']} | log_id: {$response['log_id']}");
-        }
-
-        return $response;
-    }
-
     public function getAccessToken(string $authorizationCode, ?string $redirectUri = null): array
     {
-        $response = $this->getHttpClient()->post(
+        return $this->makePostRequest(
             'https://open.tiktokapis.com/v2/oauth/token/',
             [
                 'headers' => [
@@ -92,24 +116,20 @@ class PhpTiktokSdk
                 ]
             ]
         );
-
-        return $this->handleHttpResponse(json_decode($response->getBody(), true));
     }
 
     public function getUserInfo(string $authorizationCode, array $fields): array
     {
-        $response = $this->getHttpClient()->get(
+        return $this->makeGetRequest(
             'https://open.tiktokapis.com/v2/user/info/',
             [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $authorizationCode,
+                    'Authorization' => "Bearer {$authorizationCode}",
                 ],
                 'query' => [
                     'fields' => $this->formatUserFields(...$fields),
-                ],  
+                ]
             ]
         );
-        
-        return $this->handleHttpResponse(json_decode($response->getBody(), true));
     }
 }
