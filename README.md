@@ -8,7 +8,7 @@ This package provides an wrapper for TikTok REST API for PHP 8.3 and later
 
 ## Installation
 
-In your existing Laravel application you can install this package using [Composer](https://getcomposer.org).
+In your exist PHP application you can install this package using [Composer](https://getcomposer.org).
 
 ```bash
 composer require komptip/php-tiktok-sdk
