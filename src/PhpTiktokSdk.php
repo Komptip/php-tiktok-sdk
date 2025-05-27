@@ -41,11 +41,26 @@ class PhpTiktokSdk
 
     public function handleHttpResponse(array $response): array
     {
-        if (isset($response['error'])) {
-            throw new TikTokAPIException("{$response['error']}: {$response['error_description']} | log_id: {$response['log_id']}");
+        // There is can be two types of errors in TikTok API:
+        // 1. Error in response body as array with 'code', 'message' and 'log_id' keys
+        // 2. Error as a string directly with as code and error_description with log_id just in root of response array
+        if (isset($response['error']) && (!isset($response['error']['code']) || $response['error']['code'] !== 'ok')) {
+            $this->throwException($response);
         }
 
         return $response;
+    }
+
+    public function throwException(array $response): void
+    {
+        switch(true) {
+            case is_array($response['error']):
+                throw new TikTokAPIException("{$response['error']['code']}: {$response['error']['message']} | log_id: {$response['log_id']}");
+                break;
+            default:
+                throw new TikTokAPIException("{$response['error']}: {$response['error_description']} | log_id: {$response['log_id']}");
+                break;   
+        }
     }
 
     public function makeGetRequest(string $url, $options = []): array
@@ -74,6 +89,11 @@ class PhpTiktokSdk
     }
 
     public function formatUserFields(UserField ...$fields): string
+    {
+        return implode(',', array_map(fn($field) => $field->value, $fields));
+    }
+
+    public function formatVideoFields(VideoField ...$fields): string
     {
         return implode(',', array_map(fn($field) => $field->value, $fields));
     }
@@ -132,4 +152,49 @@ class PhpTiktokSdk
             ]
         );
     }
+
+    public function getUserVideos(string $authorizationCode, array $fields, int $maxCount = 10, ?int $cursor = null): array
+    {
+        if ($maxCount < 1 || $maxCount > 20) {
+            throw new \Exception('Invalid max count of videos per request to /v2/video/list/ route of TikTok API. Min count is 1, max count is 20');
+        }
+
+        return $this->makePostRequest(
+            'https://open.tiktokapis.com/v2/video/list/',
+            [
+                'headers' => [
+                    'Authorization' => "Bearer {$authorizationCode}",
+                ],
+                'query' => [
+                    'fields' => $this->formatVideoFields(...$fields),
+                ],
+                'form_params' => [
+                    'max_count' => $maxCount,
+                    ($cursor ? 'cursor' : '') => $cursor,
+                ]
+            ]
+        );
+    }
+
+    public function queryUserVideos(string $authorizationCode, array $fields, array $videoIds = []): array
+    {
+        return $this->makePostRequest(
+            'https://open.tiktokapis.com/v2/video/query/',
+            [
+                'headers' => [
+                    'Authorization' => "Bearer {$authorizationCode}",
+                ],
+                'query' => [
+                    'fields' => $this->formatVideoFields(...$fields),
+                ],
+                'form_params' => [
+                    'filters' => json_encode([
+                        'video_ids' => $videoIds,
+                    ])
+                ]
+            ]
+        );
+    }
+
+
 }
