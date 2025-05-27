@@ -9,7 +9,7 @@ enum UserField: string
     case AvatarURL = 'avatar_url';
     case AvatarURL100 = 'avatar_url_100';
     case AvatarLargeURL = 'avatar_larger_url';
-    case Displayname = 'display_name';
+    case DisplayName = 'display_name';
     case BioDescription = 'bio_description';
     case ProfileDeepLink = 'profile_deep_link';
     case IsVerified = 'is_verified';
