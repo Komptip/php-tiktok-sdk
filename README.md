@@ -48,15 +48,17 @@ This package is in early development stage. Not all endpoints are implemented ye
 - [x] [Login kit](https://developers.tiktok.com/doc/login-kit-overview?enter_method=left_navigation)
     User authorization 
     **Ready to use**
+    [Documentation](https://github.com/Komptip/php-tiktok-sdk/wiki/User-authorization)
 - [ ] [Content posting API](https://developers.tiktok.com/doc/content-posting-api-get-started?enter_method=left_navigation)
     Posting videos and images to user profile
     **Not implemented yet**
 - [ ] [Data Portability API](https://developers.tiktok.com/doc/data-portability-api-get-started?enter_method=left_navigation)
     Getting user data such as activity, comments, etc.
     **Not implemented yet**
-- [ ] [Display API](https://developers.tiktok.com/doc/display-api-overview?enter_method=left_navigation)
+- [x] [Display API](https://developers.tiktok.com/doc/display-api-overview?enter_method=left_navigation)
     User profile information
-    **Partially implemented. See [/v2/user/info/](https://github.com/Komptip/php-tiktok-sdk/wiki/User-authorization)**. /v2/video/list/ and /v2/video/query/ are not implemented yet
+    **Ready to use**
+    [Documentation](https://github.com/Komptip/php-tiktok-sdk/wiki/User-authorization)
 
 ## License
 
